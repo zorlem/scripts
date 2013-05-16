@@ -26,8 +26,10 @@ my $starttime=[gettimeofday];
 my $database;
 my $linecount=0;
 my $dbcount=0;
-my $outfile=sprintf("%.5d", $dbcount) . '-globals';
-open my $outfh, '>', "$outfile.sql";
+my $outfile=sprintf("%.5d", $dbcount) . '-globals.sql';
+open my $outfh, '>', "$outfile";
+
+$OUTPUT_AUTOFLUSH=1;
 
 while(<>) {
   if (m|\A-- Current Database: `(.+)`\Z|) {
@@ -36,9 +38,10 @@ while(<>) {
     $linecount=0;
     $dbcount++;
     print "Splitting database: $database, ";
+    $starttime=[gettimeofday];
     # encountered a new database, time to switch the files
     close $outfh;
-    $outfile=sprintf("%.5d", $dbcount) . q{-} . $database;
+    $outfile=sprintf("%.5d", $dbcount) . "-${database}.sql";
     open $outfh, '>', "$outfile.sql";
   }
   $linecount++;
