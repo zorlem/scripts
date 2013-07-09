@@ -12,11 +12,12 @@
 #+be bellow this directory.
 # OpenJDK 6 or 7 (note that this is not for the Sun's JDK as it lacks the necessary javazic.jar. 
 JDIR=${JAVA_HOME:=/usr/lib/jvm/default-java/}
-
+JZIC=${JAVA_ZIC:=$JDIR/jre/lib/javazic.jar}
 # program paths
 TAR='/bin/tar'
 WGET='/usr/bin/wget'
 SED='/bin/sed'
+JZICPATH=( "$JZIC" "/usr/share/java/javazic.jar" )
 
 # URL and filename for the Olson TimeZone data. IANA is the official distributor of 
 #+the files
@@ -134,12 +135,25 @@ EOF_MARKER
 
 function zic() {
   local destdir="$1"
+  if ! [ -f "$JZIC" ]; then
+    # javazic.jar not found in the specified path, trying to find it using JZICPATH
+    JZIC=""
+    for jar in "${JZICPATH[@]}"; do
+      if [ -f "${jar}" ]; then
+        JZIC="$jar"
+      fi
+    done
+    if [ -z "$JZIC" ]; then
+      cleanup
+      error $LINENO "javazic.jar not found. Please set the JAVA_ZIC environment variable properly. At the moment its value is: \"$JAVA_ZIC\""
+    fi
+  fi
   if [ -d "$PWD/zi-$version" ]; then
     cleanup
     error $LINENO "$PWD/zi-$version already exists. Please move it away first"
   fi
   echo "Compiling Olson TZ data to Java TZ format..."
-  "${JDIR}/bin/java" -jar "${JDIR}/jre/lib/javazic.jar" -V "$version" -d "$destdir" "${TZFILES[@]}"
+  "${JDIR}/bin/java" -jar "${JZIC}" -V "$version" -d "$destdir" "${TZFILES[@]}"
   if [ "$?" -eq "0" ]; then
     mv "$destdir" "$PWD/zi-$version"
     echo "The compilation was successful. The new timezone data is available in $PWD/zi-$version."
