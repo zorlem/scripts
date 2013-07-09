@@ -30,9 +30,9 @@ WGETOPTIONS='--retr-symlinks --no-verbose --no-clobber'
 # timestamping doesn't work for symlinks https://savannah.gnu.org/bugs/index.php?20522
 #WGETOPTIONS='--timestamping --retr-symlinks --no-verbose --no-clobber'
 
-set -o nounset;
-set -o errexit; 
-set -o pipefail;
+set -o nounset
+set -o errexit
+set -o pipefail
 
 readonly -a TIMEZONES=( africa \
                         antarctica \
@@ -52,11 +52,11 @@ readonly -a TIMEZONES=( africa \
                         )
 
 function error() {
-  local linenumber="$1";
-  local errmessage="${2:-'No specific error message defined'}";
-  local code="${3:-1}";
-  echo "Error on or near line ${linenumber}: ${errmessage}; exiting with status ${code}";
-  exit "${code}";
+  local linenumber="$1"
+  local errmessage="${2:-'No specific error message defined'}"
+  local code="${3:-1}"
+  echo "Error on or near line ${linenumber}: ${errmessage}; exiting with status ${code}"
+  exit "${code}"
 }
 
 function gettzdata() {
@@ -172,9 +172,9 @@ cleanup() {
 }
 
 
-tztmp=$(mktemp -d tzjava-update.XXXXXXX);
+tztmp=$(mktemp -d tzjava-update.XXXXXXX)
 if ! [ -d "$tztmp" ]; then
-  error $LINENO "Error creating temporary directory $tztmp";
+  error $LINENO "Error creating temporary directory $tztmp"
 fi
 
 TZDIR="$tztmp/tzdata"
