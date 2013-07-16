@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# luks-cryptappdb decrypt and open an encrypted partition
+#
+# chkconfig: - 01 90
+# description: adds encrypted LUKS partitions.
+CRYPTDISK='/dev/disk/by-uuid/c9ec3020-674e-4713-8902-7755c9eb1773'
+DESTNAME='cryptappdb'
+KEYFILE='/root/luks.key'
+RETVAL=0
+
+. /etc/init.d/functions
+
+# See how we were called.
+case "$1" in
+    start)
+    	if cryptsetup isLuks ${CRYPTDISK} 2>/dev/null; then
+        	cryptsetup luksOpen --key-file "${KEYFILE}" "${CRYPTDISK}" "${DESTNAME}" 2>/dev/null >/dev/null
+		RETVAL=$?
+		if [ ${RETVAL} = 0 ]; then
+			success $"${CRYPTDISK} decrypted successfully";
+			touch "/var/lock/subsys/luks-${DESTNAME}"
+		else
+			RETVAL=1
+			failure $"${CRYPTDISK} could not be decrypted";
+		fi
+	else
+		failure $"Error: ${CRYPTDISK} is not a LUKS device"
+		RETVAL=1
+	fi
+	echo;
+        ;;
+    stop)
+    	if cryptsetup isLuks ${CRYPTDISK} 2>/dev/null; then
+		# we don't set RETVAL to error, even if the device was not opened. Only if it's busy
+        	cryptsetup luksClose "/dev/mapper/${DESTNAME}" > /dev/null
+		if [ $? = 0 ]; then
+			success $"${CRYPTDISK} closed successfully";
+		elif [ $? = 240 ]; then
+			failure $"/dev/mapper/${DESTNAME} is busy";
+			RETVAL=1
+		else
+			failure $"${CRYPTDISK} could not be closed (was not open?)";
+		fi
+	else
+		failure $"Error: ${CRYPTDISK} is not a LUKS device"
+		RETVAL=1
+	fi
+	echo;
+        rm -f "/var/lock/subsys/luks-${DESTNAME}"
+
+        ;;
+	
+     status)
+	if cryptsetup status "${DESTNAME}" >/dev/null 2>/dev/null; then
+		RETVAL=$?
+		echo $"${CRYPTDISK} is opened"
+	else
+		RETVAL=3
+		echo $"${CRYPTDISK} is not opened"
+	fi
+	;;
+    *)
+        echo $"Usage: $0 {start|stop|status}"
+        exit 1
+esac
+
+exit ${RETVAL}
