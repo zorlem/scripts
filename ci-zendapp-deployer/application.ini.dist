@@ -1,0 +1,100 @@
+[production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+includePaths.library = APPLICATION_PATH "/../library"
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+appnamespace = "Application"
+
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontController.params.displayExceptions = 0
+resources.frontController.defaultControllerName = "index"
+
+resources.layout.layoutPath = APPLICATION_PATH "/views/scripts/layouts"
+resources.layout.layout  = "default"
+
+resources.multidb.system.adapter 	= "mysqli"
+resources.multidb.system.host		= "{%PRODUCTION:BO_SYSTEM_DB_HOST%}"
+resources.multidb.system.username	= "{%PRODUCTION:BO_SYSTEM_DB_USER%}"
+resources.multidb.system.password	= "{%PRODUCTION:BO_SYSTEM_DB_PASS%}"
+resources.multidb.system.dbname		= "{%PRODUCTION:BO_SYSTEM_DB_NAME%}"
+resources.multidb.system.charset	= "utf8"
+resources.multidb.system.default	= true
+
+resources.multidb.a2b.adapter 	= "pdo_pgsql"
+resources.multidb.a2b.host		= "{%PRODUCTION:BO_A2B_DB_HOST%}"
+resources.multidb.a2b.username	= "{%PRODUCTION:BO_A2B_DB_USER%}"
+resources.multidb.a2b.password	= "{%PRODUCTION:BO_A2B_DB_PASS%}"
+resources.multidb.a2b.dbname	= "{%PRODUCTION:BO_A2B_DB_NAME%}"
+resources.multidb.a2b.charset	= "utf8"
+resources.multidb.a2b.default	= false
+
+resources.multidb.mor.adapter 	= "mysqli"
+resources.multidb.mor.host		= "{%PRODUCTION:BO_MOR_DB_HOST%}"
+resources.multidb.mor.username	= "{%PRODUCTION:BO_MOR_DB_USER%}"
+resources.multidb.mor.password	= "{%PRODUCTION:BO_MOR_DB_PASS%}"
+resources.multidb.mor.dbname	= "{%PRODUCTION:BO_MOR_DB_NAME%}"
+resources.multidb.mor.charset	= "utf8"
+resources.multidb.mor.default	= false
+
+resources.multidb.gk.adapter 	= "pdo_pgsql"
+resources.multidb.gk.host		= "{%PRODUCTION:BO_GK_DB_HOST%}"
+resources.multidb.gk.username	= "{%PRODUCTION:BO_GK_DB_USER%}"
+resources.multidb.gk.password	= "{%PRODUCTION:BO_GK_DB_PASS%}"
+resources.multidb.gk.dbname		= "{%PRODUCTION:BO_GK_DB_NAME%}"
+resources.multidb.gk.charset	= "utf8"
+resources.multidb.gk.default	= false
+
+PASSWD_SALT = "{%PRODUCTION:BO_PASSWD_SALT%}"
+
+[staging : production]
+
+[testing : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+
+;backoffice
+resources.multidb.system.host		= "{%TESTING:BO_SYSTEM_DB_HOST%}"
+resources.multidb.system.username	= "{%TESTING:BO_SYSTEM_DB_USER%}"
+resources.multidb.system.password	= "{%TESTING:BO_SYSTEM_DB_PASS%}"
+resources.multidb.system.dbname		= "{%TESTING:BO_SYSTEM_DB_NAME%}"
+
+;A2B
+resources.multidb.a2b.host		= "{%TESTING:BO_A2B_DB_HOST%}"
+resources.multidb.a2b.username	= "{%TESTING:BO_A2B_DB_USER%}"
+resources.multidb.a2b.password	= "{%TESTING:BO_A2B_DB_PASS%}"
+resources.multidb.a2b.dbname	= "{%TESTING:BO_A2B_DB_NAME%}"
+
+;MOR
+resources.multidb.mor.host		= "{%TESTING:BO_MOR_DB_HOST%}"
+resources.multidb.mor.username	= "{%TESTING:BO_MOR_DB_USER%}"
+resources.multidb.mor.password	= "{%TESTING:BO_MOR_DB_PASS%}"
+resources.multidb.mor.dbname	= "{%TESTING:BO_MOR_DB_NAME%}"
+
+;GK
+resources.multidb.gk.host		= "{%TESTING:BO_GK_DB_HOST%}"
+resources.multidb.gk.username	= "{%TESTING:BO_GK_DB_USER%}"
+resources.multidb.gk.password	= "{%TESTING:BO_GK_DB_PASS%}"
+resources.multidb.gk.dbname		= "{%TESTING:BO_GK_DB_NAME%}"
+
+PASSWD_SALT = "{%TESTING:BO_PASSWD_SALT%}"
+
+
+[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1
+
+;spreed
+resources.multidb.system.host		= "localhost"
+resources.multidb.system.username	= "test"
+resources.multidb.system.password	= "test123"
+resources.multidb.system.dbname		= "test"
+
+;A2B
+resources.multidb.a2b.host		= "{%PRODUCTION:BO_A2B_DB_HOST%}"
+resources.multidb.a2b.username	= "{%PRODUCTION:BO_A2B_DB_USER%}"
+resources.multidb.a2b.password	="{%PRODUCTION:BO_A2B_DB_PASS%}" 
+resources.multidb.a2b.dbname	= "{%PRODUCTION:BO_A2B_DB_NAME%}"
+
+PASSWD_SALT = "D@KA_*SLtu8i6$(@!08328!$n41MRWO)^$"
