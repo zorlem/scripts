@@ -1,0 +1,8 @@
+<db>
+	db=<dbname>
+	host=<dbhostname>
+	port=<dbport>
+	user=<dbusername>
+	pass=<"dbpassword">
+</db>
+
